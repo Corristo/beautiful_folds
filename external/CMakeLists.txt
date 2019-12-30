@@ -1,15 +1,10 @@
 include(FetchContent)
 
-FetchContent_Declare(
-  tmp
-  GIT_REPOSITORY https://github.com/Corristo/tmp.git
-  GIT_TAG f8d65da
-)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
-FetchContent_GetProperties(tmp)
-if(NOT tmp_POPULATED)
-  set(TMP_BUILD_TESTS OFF CACHE BOOL "Do not build tmp's tests")
-  FetchContent_MakeAvailable(tmp)
+include(boost_tmp)
+
+if (BEAUTIFOLDS_BUILD_TESTS)
+  include(gtest)
 endif()
 
-add_library(Boost::tmp ALIAS boost_tmp)
