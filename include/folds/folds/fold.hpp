@@ -154,83 +154,6 @@ class Fold : public detail::FoldImpl<InputFn, OutputFn> {
 
   template <typename F>
   constexpr auto map(F f) const;
-
- private:
-  template <typename G1, typename G2>
-  friend constexpr auto inline operator+(Fold f1, Fold<G1, G2> f2) {
-    return lift(std::plus<>{})(f1, f2);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator+(Num n, Fold f) {
-    return lift(std::plus<>{})(detail::pure_fold(n), f);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator+(Fold f, Num n) {
-    return lift(std::plus<>{})(f, detail::pure_fold(n));
-  }
-
-  template <typename F, typename G>
-  friend constexpr auto inline operator/(Fold f1, Fold<F, G> f2) {
-    return lift(std::divides<>{})(f1, f2);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator/(Num n, Fold f) {
-    return lift(std::divides<>{})(detail::pure_fold(n), f);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator/(Fold f, Num n) {
-    return lift(std::divides<>{})(f, detail::pure_fold(n));
-  }
-
-  template <typename F, typename G>
-  friend constexpr auto inline operator*(Fold f1, Fold<F, G> f2) {
-    return lift(std::multiplies<>{})(f1, f2);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator*(Num n, Fold f) {
-    return lift(std::multiplies<>{})(detail::pure_fold(n), f);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator*(Fold f, Num n) {
-    return lift(std::multiplies<>{})(f, detail::pure_fold(n));
-  }
-
-  template <typename G1, typename G2>
-  friend constexpr auto inline operator-(Fold f1, Fold<G1, G2> f2) {
-    return lift(std::minus<>{})(f1, f2);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator-(Num n, Fold f) {
-    return lift(std::minus<>{})(detail::pure_fold(n), f);
-  }
-
-  template <typename Num,
-            std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
-  friend constexpr auto inline operator-(Fold f, Num n) {
-    return lift(std::minus<>{})(f, detail::pure_fold(n));
-  }
-
-  friend constexpr auto inline operator-(Fold f1) {
-    return f1.map(std::negate<>{});
-  }
-
-  friend constexpr auto inline operator+(Fold f1) {
-    return f1.map([](auto val) { return +val; });
-  }
 };
 
 template <typename F1, typename F2>
@@ -311,6 +234,84 @@ template <typename InputFn, typename OutputFn>
 template <typename F>
 constexpr auto Fold<InputFn, OutputFn>::map(F f) const {
   return lift(f)(*this);
+}
+
+template <typename F1, typename F2, typename G1, typename G2>
+constexpr auto inline operator+(Fold<F1, F2> f1, Fold<G1, G2> f2) {
+  return lift(std::plus<>{})(f1, f2);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator+(Num n, Fold<F1, F2> f) {
+  return lift(std::plus<>{})(detail::pure_fold(n), f);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator+(Fold<F1, F2> f, Num n) {
+  return lift(std::plus<>{})(f, detail::pure_fold(n));
+}
+
+template <typename F1, typename F2, typename G1, typename G2>
+constexpr auto inline operator/(Fold<F1, F2> f1, Fold<G1, G2> f2) {
+  return lift(std::divides<>{})(f1, f2);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator/(Num n, Fold<F1, F2> f) {
+  return lift(std::divides<>{})(detail::pure_fold(n), f);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator/(Fold<F1, F2> f, Num n) {
+  return lift(std::divides<>{})(f, detail::pure_fold(n));
+}
+
+template <typename F1, typename F2, typename G1, typename G2>
+constexpr auto inline operator*(Fold<F1, F2> f1, Fold<G1, G2> f2) {
+  return lift(std::multiplies<>{})(f1, f2);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator*(Num n, Fold<F1, F2> f) {
+  return lift(std::multiplies<>{})(detail::pure_fold(n), f);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator*(Fold<F1, F2> f, Num n) {
+  return lift(std::multiplies<>{})(f, detail::pure_fold(n));
+}
+
+template <typename F1, typename F2, typename G1, typename G2>
+constexpr auto inline operator-(Fold<F1, F2> f1, Fold<G1, G2> f2) {
+  return lift(std::minus<>{})(f1, f2);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator-(Num n, Fold<F1, F2> f) {
+  return lift(std::minus<>{})(detail::pure_fold(n), f);
+}
+
+template <typename F1, typename F2, typename Num,
+          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+constexpr auto inline operator-(Fold<F1, F2> f, Num n) {
+  return lift(std::minus<>{})(f, detail::pure_fold(n));
+}
+
+template <typename F1, typename F2>
+constexpr auto inline operator-(Fold<F1, F2> f1) {
+  return f1.map(std::negate<>{});
+}
+
+template <typename F1, typename F2>
+constexpr auto inline operator+(Fold<F1, F2> f1) {
+  return f1.map([](auto val) { return +val; });
 }
 
 }  // namespace folds
