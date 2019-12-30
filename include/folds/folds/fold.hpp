@@ -85,10 +85,11 @@ template <typename InputFn, typename OutputFn>
 class FoldImpl : public TallyEbo<InputFn, std::is_empty_v<InputFn>>,
                  public SummarizeEbo<OutputFn, std::is_empty_v<OutputFn>> {
  public:
-  explicit constexpr FoldImpl() requires std::is_default_constructible_v<
-      TallyEbo<InputFn, std::is_empty_v<InputFn>>>&& std::
-      is_default_constructible_v<
-          SummarizeEbo<OutputFn, std::is_empty_v<OutputFn>>> = default;
+  explicit constexpr FoldImpl() requires(
+      std::is_default_constructible_v<
+          TallyEbo<InputFn, std::is_empty_v<InputFn>>>&&
+          std::is_default_constructible_v<
+              SummarizeEbo<OutputFn, std::is_empty_v<OutputFn>>>) = default;
 
   explicit constexpr FoldImpl(InputFn in, OutputFn o)
       : TallyEbo<InputFn, std::is_empty_v<InputFn>>{in},
@@ -101,8 +102,8 @@ class FoldImpl : public TallyEbo<InputFn, std::is_empty_v<InputFn>>,
 template <typename Foldlike>
 class FoldImpl<Foldlike, FoldLikeTag> : public Foldlike {
  public:
-  explicit constexpr FoldImpl() requires std::is_default_constructible_v<
-      Foldlike> = default;
+  explicit constexpr FoldImpl() requires(
+      std::is_default_constructible_v<Foldlike>) = default;
   explicit constexpr FoldImpl(Foldlike f) : Foldlike{std::move(f)} {}
 
   using Foldlike::summarize;
@@ -123,13 +124,12 @@ class Fold : public detail::FoldImpl<InputFn, OutputFn> {
       detail::FoldImpl<InputFn, OutputFn>> */
       = default;
 
-  explicit constexpr Fold(
-      InputFn in,
-      OutputFn out) requires !std::is_same_v<OutputFn, detail::FoldLikeTag>
+  explicit constexpr Fold(InputFn in, OutputFn out) requires(
+      !std::is_same_v<OutputFn, detail::FoldLikeTag>)
       : detail::FoldImpl<InputFn, OutputFn>{std::move(in), std::move(out)} {}
 
-  explicit constexpr Fold(
-      InputFn in) requires std::is_same_v<OutputFn, detail::FoldLikeTag>
+  explicit constexpr Fold(InputFn in) requires(
+      std::is_same_v<OutputFn, detail::FoldLikeTag>)
       : detail::FoldImpl<InputFn, detail::FoldLikeTag>{std::move(in)} {}
 
   using detail::FoldImpl<InputFn, OutputFn>::tally;

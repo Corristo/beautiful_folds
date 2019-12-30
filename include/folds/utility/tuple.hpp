@@ -39,7 +39,7 @@ struct element_holder<I, T, boost::tmp::true_> {
 
 template <typename... Ts>
 struct tuple_base : public Ts... {
-  constexpr tuple_base() requires sizeof...(Ts) > 0 = default;
+  constexpr tuple_base() requires(sizeof...(Ts) > 0) = default;
   constexpr tuple_base(Ts... ts) : Ts{std::move(ts)}... {}
 };
 
@@ -58,7 +58,7 @@ using tuple_element = boost::tmp::call_<
 template <typename... Ts>
 class tuple : private detail::tuple_base_type<Ts...> {
  public:
-  constexpr explicit tuple() requires sizeof...(Ts) > 0 = default;
+  constexpr explicit tuple() requires(sizeof...(Ts) > 0) = default;
   constexpr explicit tuple(Ts... ts)
       : detail::tuple_base_type<Ts...>{std::move(ts)...} {}
 
