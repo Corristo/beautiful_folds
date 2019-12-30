@@ -1,8 +1,8 @@
 #pragma once
 
-#include "folds/utility/type_traits.hpp"
-
 #include <boost/tmp.hpp>
+
+#include "folds/utility/type_traits.hpp"
 
 namespace folds {
 namespace detail {

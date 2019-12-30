@@ -1,10 +1,10 @@
 #pragma once
 
+#include <functional>
+
 #include "folds/monoids/void.hpp"
 #include "folds/utility/tuple.hpp"
 #include "folds/utility/type_traits.hpp"
-
-#include <functional>
 
 namespace folds {
 

@@ -1,3 +1,8 @@
+#include <array>
+#include <cmath>
+#include <functional>
+#include <iostream>
+
 #include "folds/drivers/reduce.hpp"
 #include "folds/folds/average.hpp"
 #include "folds/folds/fold.hpp"
@@ -7,11 +12,6 @@
 #include "folds/monoids/void.hpp"
 #include "folds/utility/tuple.hpp"
 #include "folds/utility/type_traits.hpp"
-
-#include <array>
-#include <cmath>
-#include <functional>
-#include <iostream>
 
 namespace folds {
 
