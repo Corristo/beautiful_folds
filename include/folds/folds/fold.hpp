@@ -219,6 +219,9 @@ class Fold : public detail::FoldImpl<InputFn, OutputFn> {
 template <typename F1, typename F2>
 Fold(F1, F2)->Fold<remove_cvref_t<F1>, remove_cvref_t<F2>>;
 
+template <typename F>  // requires foldlike
+Fold(F)->Fold<remove_cvref_t<F>, detail::FoldLikeTag>;
+
 namespace detail {
 
 template <typename FoldsTupleT, typename F, typename MonoidT, std::size_t... I>
