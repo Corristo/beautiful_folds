@@ -112,6 +112,23 @@ class FoldImpl<Foldlike, FoldLikeTag> : public Foldlike {
 
 template <typename F>
 struct lift_t;
+
+template <auto TallyFnPtr, auto SummarizeFnPtr>
+class FnPtrFold {
+ public:
+  explicit constexpr FnPtrFold() = default;
+
+  template <typename T>
+  constexpr decltype(auto) tally(T&& in) const {
+    return (*TallyFnPtr)(std::forward<T>(in));
+  }
+
+  template <typename T>
+  constexpr decltype(auto) summarize(T&& in) const {
+    return (*SummarizeFnPtr)(std::forward<T>(in));
+  }
+};
+
 }  // namespace detail
 
 template <typename F>
@@ -221,6 +238,10 @@ Fold(F1, F2)->Fold<remove_cvref_t<F1>, remove_cvref_t<F2>>;
 
 template <typename F>  // requires foldlike
 Fold(F)->Fold<remove_cvref_t<F>, detail::FoldLikeTag>;
+
+template <auto TallyFnPtr, auto SummarizeFnPtr>
+using make_fold =
+    Fold<detail::FnPtrFold<TallyFnPtr, SummarizeFnPtr>, detail::FoldLikeTag>;
 
 namespace detail {
 
