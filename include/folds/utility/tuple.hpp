@@ -1,13 +1,14 @@
 #pragma once
 
-#include <boost/tmp.hpp>
+#include <metal.hpp>
 
 #include "folds/utility/type_traits.hpp"
 
 namespace folds {
 namespace detail {
+
 template <typename T>
-using empty = boost::tmp::bool_<(std::is_empty_v<T>)>;
+using empty = metal::number<(std::is_empty_v<T>)>;
 
 template <typename I, typename T, typename = empty<T>>
 struct element_holder {
@@ -26,7 +27,7 @@ struct element_holder {
 };
 
 template <typename I, typename T>
-struct element_holder<I, T, boost::tmp::true_> {
+struct element_holder<I, T, metal::true_> {
   constexpr element_holder() = default;
 
   template <typename R>
@@ -44,14 +45,18 @@ struct tuple_base : public Ts... {
 };
 
 template <typename... Ts>
-using tuple_base_type = boost::tmp::call_<
-    boost::tmp::zip_with_index_<boost::tmp::lift_<element_holder>,
-                                boost::tmp::lift_<tuple_base>>,
-    Ts...>;
+using index_to_type_map =
+    metal::transform<metal::lambda<metal::list>,
+                     metal::indices<metal::list<Ts...>>, metal::list<Ts...>>;
+
+template <typename... Ts>
+using tuple_base_type = metal::apply<
+    metal::lambda<tuple_base>,
+    metal::transform<metal::lambda<element_holder>,
+                     metal::indices<metal::list<Ts...>>, metal::list<Ts...>>>;
 
 template <std::size_t I, typename T>
-using tuple_element = boost::tmp::call_<
-    boost::tmp::unpack_<boost::tmp::index_<boost::tmp::uint_<I>>>, T>;
+using tuple_element = metal::at_key<T, metal::number<I>>;
 
 }  // namespace detail
 
@@ -65,8 +70,9 @@ class tuple : private detail::tuple_base_type<Ts...> {
   template <std::size_t I>
   constexpr auto get() const {
     return static_cast<detail::element_holder<
-        boost::tmp::uint_<I>,
-        detail::tuple_element<I, boost::tmp::list_<Ts...>>> const&>(*this)
+        metal::number<I>,
+        detail::tuple_element<I, detail::index_to_type_map<Ts...>>> const&>(
+               *this)
         .get();
   }
 };
@@ -91,7 +97,8 @@ struct tuple_size<folds::tuple<Ts...>> {
 
 template <std::size_t I, typename... Ts>
 struct tuple_element<I, folds::tuple<Ts...>> {
-  using type = folds::detail::tuple_element<I, boost::tmp::list_<Ts...>>;
+  using type =
+      folds::detail::tuple_element<I, folds::detail::index_to_type_map<Ts...>>;
 };
 
 }  // namespace std

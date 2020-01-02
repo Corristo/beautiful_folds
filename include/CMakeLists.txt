@@ -5,7 +5,7 @@ target_include_directories(folds
 )
 target_link_libraries(folds
   INTERFACE
-    Boost::tmp
+    Metal::Metal
 )
 
 target_compile_options(folds
