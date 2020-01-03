@@ -6,5 +6,6 @@ include(metal)
 
 if (BEAUTIFOLDS_BUILD_TESTS)
   include(gtest)
+  include(rapidcheck)
 endif()
 
