@@ -23,3 +23,11 @@ target_link_libraries(noexcept_propagation_tests
     GMock::main
 )
 gtest_discover_tests(noexcept_propagation_tests)
+
+add_executable(operators_tests operators.cpp)
+target_link_libraries(operators_tests
+  PRIVATE
+    folds::folds
+    GMock::main
+)
+gtest_discover_tests(operators_tests)
