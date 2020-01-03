@@ -19,8 +19,12 @@ struct is_fold : std::false_type {};
 template <typename InputFn, typename OutputFn>
 struct is_fold<Fold<InputFn, OutputFn>> : std::true_type {};
 
+}  // namespace detail
+
 template <typename T>
-constexpr inline bool is_fold_v = is_fold<T>::value;
+constexpr inline bool is_fold_v = detail::is_fold<T>::value;
+
+namespace detail {
 
 template <typename T>
 constexpr auto inline pure_fold(T val) {
@@ -242,13 +246,13 @@ constexpr auto inline operator+(Fold<F1, F2> f1, Fold<G1, G2> f2) {
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator+(Num n, Fold<F1, F2> f) {
   return lift(std::plus<>{})(detail::pure_fold(n), f);
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator+(Fold<F1, F2> f, Num n) {
   return lift(std::plus<>{})(f, detail::pure_fold(n));
 }
@@ -259,13 +263,13 @@ constexpr auto inline operator/(Fold<F1, F2> f1, Fold<G1, G2> f2) {
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator/(Num n, Fold<F1, F2> f) {
   return lift(std::divides<>{})(detail::pure_fold(n), f);
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator/(Fold<F1, F2> f, Num n) {
   return lift(std::divides<>{})(f, detail::pure_fold(n));
 }
@@ -276,13 +280,13 @@ constexpr auto inline operator*(Fold<F1, F2> f1, Fold<G1, G2> f2) {
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator*(Num n, Fold<F1, F2> f) {
   return lift(std::multiplies<>{})(detail::pure_fold(n), f);
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator*(Fold<F1, F2> f, Num n) {
   return lift(std::multiplies<>{})(f, detail::pure_fold(n));
 }
@@ -293,13 +297,13 @@ constexpr auto inline operator-(Fold<F1, F2> f1, Fold<G1, G2> f2) {
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator-(Num n, Fold<F1, F2> f) {
   return lift(std::minus<>{})(detail::pure_fold(n), f);
 }
 
 template <typename F1, typename F2, typename Num,
-          std::enable_if_t<!detail::is_fold_v<remove_cvref_t<Num>>, int> = 0>
+          std::enable_if_t<!is_fold_v<remove_cvref_t<Num>>, int> = 0>
 constexpr auto inline operator-(Fold<F1, F2> f, Num n) {
   return lift(std::minus<>{})(f, detail::pure_fold(n));
 }
