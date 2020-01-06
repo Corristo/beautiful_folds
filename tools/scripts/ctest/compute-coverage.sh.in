@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gcovr --filter @CTEST_SOURCE_DIRECTORY@/include -r @CTEST_SOURCE_DIRECTORY@ -x -o @CTEST_BINARY_DIRECTORY@/coverage.xml @CTEST_BINARY_DIRECTORY@

@@ -1,0 +1,39 @@
+get_filename_component(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/../../.." REALPATH)
+set(CTEST_BINARY_DIRECTORY "${CTEST_SOURCE_DIRECTORY}/build/gcc-coverage")
+
+# ensure clean build
+file(REMOVE_RECURSE ${CTEST_BINARY_DIRECTORY})
+
+set(CTEST_BUILD_NAME "Coverage build")
+
+# needs to be Unix Makefiles, with Ninja the source file locations are off and
+# thus filtering does not work
+set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
+
+set(CTEST_CONFIGURE_COMMAND "cmake")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} -DCMAKE_CXX_COMPILER=g++")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} -DCMAKE_BUILD_TYPE=Debug")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} -DCMAKE_CXX_FLAGS=\"--coverage\"")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} -B${CTEST_BINARY_DIRECTORY}")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} -H${CTEST_SOURCE_DIRECTORY}")
+set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"-G${CTEST_CMAKE_GENERATOR}\"")
+
+configure_file(
+  ${CTEST_SCRIPT_DIRECTORY}/compute-coverage.sh.in
+  ${CTEST_BINARY_DIRECTORY}/compute-coverage.sh
+  @ONLY
+)
+
+set(CTEST_COVERAGE_COMMAND "${CTEST_BINARY_DIRECTORY}/compute-coverage.sh")
+set(CTEST_COVERAGE_EXTRA_FLAGS "")
+
+set(CTEST_SUBMIT_URL
+  "https://berglerm.ddns.net:9001/submit.php?project=Beautifolds"
+)
+
+ctest_start("Experimental")
+ctest_configure()
+ctest_build()
+ctest_test()
+ctest_coverage()
+ctest_submit()

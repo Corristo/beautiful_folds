@@ -19,3 +19,5 @@ jobs:
       run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/test-clang.sh
     - name: test gcc
       run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/test-gcc.sh
+    - name: compute coverage
+      run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/coverage.sh
