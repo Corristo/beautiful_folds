@@ -11,7 +11,6 @@ target_link_libraries(folds
 target_compile_options(folds
   INTERFACE
     $<$<CXX_COMPILER_ID:GNU>:-fconcepts>
-    $<$<CXX_COMPILER_ID:Clang>:-Xclang -fconcepts-ts>
 )
 
 add_library(folds::folds ALIAS folds)
