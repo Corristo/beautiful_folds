@@ -1,7 +1,7 @@
 FetchContent_Declare(
   metal
   GIT_REPOSITORY https://github.com/Corristo/metal.git
-  GIT_TAG c17c8ad6d65e07b2eb2903f0f404bc5792a0c28c
+  GIT_TAG 9a0df5d1a9a82c8a17dc9c1026091df4748b7184
 )
 
 FetchContent_GetProperties(metal)
