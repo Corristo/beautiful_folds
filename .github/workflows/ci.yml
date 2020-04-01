@@ -12,10 +12,10 @@ jobs:
     - name: create build directory
       run: mkdir build
     - name: build clang
-      run: docker run --rm -v ${PWD}:/source -u $(id -u) -v ${PWD}/build:/build corristo/concepts-clang:latest /source/tools/scripts/linux/build-clang.sh
+      run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/build-clang.sh
     - name: build gcc
-      run: docker run --rm -v ${PWD}:/source -u $(id -u) -v ${PWD}/build:/build corristo/concepts-clang:latest /source/tools/scripts/linux/build-gcc.sh
+      run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/build-gcc.sh
     - name: test clang
-      run: docker run --rm -v ${PWD}:/source -u $(id -u) -v ${PWD}/build:/build corristo/concepts-clang:latest /source/tools/scripts/linux/test-clang.sh
+      run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/test-clang.sh
     - name: test gcc
-      run: docker run --rm -v ${PWD}:/source -u $(id -u) -v ${PWD}/build:/build corristo/concepts-clang:latest /source/tools/scripts/linux/test-gcc.sh
+      run: docker run --rm -v ${PWD}:/source -u $(id -u):$(id -g) -v ${PWD}/build:/build corristo/clang:10.0.0 /source/tools/scripts/linux/test-gcc.sh
