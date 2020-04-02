@@ -6,7 +6,9 @@ FetchContent_Declare(
 
 FetchContent_GetProperties(metal)
 if(NOT metal_POPULATED)
-  set(TMP_BUILD_TESTS OFF CACHE BOOL "Do not build tmp's tests")
+  set(METAL_BUILD_TESTS OFF CACHE BOOL "Do not build metal's tests")
+  set(METAL_BUILD_EXAMPLES OFF CACHE BOOL "Do not build metal's examples")
+  set(METAL_BUILD_DOC OFF CACHE BOOL "Do not build metal's documentation")
   FetchContent_MakeAvailable(metal)
 endif()
 
