@@ -6,6 +6,7 @@ FetchContent_Declare(
 
 set(INSTALL_GTEST OFF)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(gtest_force_shared_crt ON CACHE BOOL "")
 
 FetchContent_MakeAvailable(googletest)
 
